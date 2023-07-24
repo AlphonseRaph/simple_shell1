@@ -1,4 +1,3 @@
-Copy code
 #ifndef ALIAS_H
 #define ALIAS_H
 

@@ -16,21 +16,29 @@ char* my_getline(void)
     char* line = NULL;
     int line_index = 0;
     int read_complete = 0;
-
+int new_line_length;
+int remaining_bytes;
     while (!read_complete) {
-        // Check if there's more data in the buffer
-        if (bytes_remaining <= 0) {
+        /*
+	 * Check if there's more data in the buffer
+        
+	 */
+	    if (bytes_remaining <= 0) {
             bytes_read = read(STDIN_FILENO, buffer, BUFFER_SIZE);
             if (bytes_read <= 0) {
-                // End of input or error occurred
-                return NULL;
+                /*
+		 * End of input or error occurred
+               */
+		 return NULL;
             }
             bytes_remaining = bytes_read;
             buffer_index = 0;
         }
 
-        // Read character by character until newline or end of buffer
-        while (buffer_index < bytes_read) {
+        /*
+	 * Read character by character until newline or end of buffer
+        */
+	 while (buffer_index < bytes_read) {
             if (buffer[buffer_index] == '\n') {
                 read_complete = 1;
                 break;
@@ -38,8 +46,10 @@ char* my_getline(void)
             buffer_index++;
         }
 
-        // Allocate memory for the line and copy characters
-        int new_line_length = buffer_index - line_index;
+        /*
+	 * Allocate memory for the line and copy characters
+        */
+	 new_line_length = buffer_index - line_index;
         line = realloc(line, line_index + new_line_length + 1);
         if (!line) {
             fprintf(stderr, "Memory allocation failed.\n");
@@ -48,8 +58,10 @@ char* my_getline(void)
         memcpy(line + line_index, buffer, new_line_length);
         line_index += new_line_length;
 
-        // Move remaining characters to the beginning of the buffer
-        int remaining_bytes = bytes_read - buffer_index;
+        /*
+	 * Move remaining characters to the beginning of the buffer
+     */
+       	 remaining_bytes = bytes_read - buffer_index;
         if (remaining_bytes > 0) {
             memmove(buffer, buffer + buffer_index, remaining_bytes);
         }
@@ -57,8 +69,10 @@ char* my_getline(void)
         bytes_remaining = remaining_bytes;
     }
 
-    // Null-terminate the line
-    line[line_index] = '\0';
+    /*
+     * Null-terminate the line
+   */
+     line[line_index] = '\0';
 
     return line;
 }
